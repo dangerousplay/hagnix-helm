@@ -1,0 +1,25 @@
+{{ if (.Values.backend.node.autoscaling.use) -}}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nodeback
+  labels:
+    app: nodeback
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nodeback
+  minReplicas: {{ .Values.backend.node.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.backend.node.autoscaling.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: '50'
+{{- end }}

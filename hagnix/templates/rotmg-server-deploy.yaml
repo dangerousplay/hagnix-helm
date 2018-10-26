@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rotmgserver
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: rotmgserver
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: {{ .Values.backend.rotmgserver.replicas }}
+  template:
+    metadata:
+      namespace: {{ .Release.Namespace }}
+      name: rotmgserver
+      labels:
+        app: rotmgserver
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    spec:
+      containers:
+      - name: rotmgserver
+        image: {{ .Values.backend.rotmgserver.image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 80
+        env:
+        - name: CONFIG
+          value: {{ .Values.backend.rotmgserver.configPath }}
+        {{ if (.Values.backend.rotmgserver.disableRegister) -}}
+        - name: DISABLE_REGISTER
+          value: "true"
+        {{- end }}
+        - name: DB_HOST
+          value: {{ .Values.backend.mysql.host }}
+        - name: DB_USER
+          value: {{ .Values.backend.mysql.user }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: MYSQL_PASSWORD
+        - name: REDIS_HOST
+          value: {{ .Values.backend.redis.host }}
+        - name: REDIS_PORT
+          value: {{ quote .Values.backend.redis.port }}
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: REDIS_PASSWORD
+              name: secrets
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 1
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 20
+        volumeMounts:
+        - mountPath: /app/config
+          name: config
+      volumes:
+      - name: config
+        secret:
+          secretName: server-config
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: rotmgserver

@@ -1,0 +1,25 @@
+{{ if (.Values.backend.rotmgserver.autoscaling.use) -}}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rotmgserver
+  labels:
+    app: rotmgserver
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rotmgserver
+  minReplicas: {{ .Values.backend.rotmgserver.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.backend.rotmgserver.autoscaling.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: '50'
+{{- end }}

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ .Values.backend.mongodb.host }}
+  labels:
+    app: mongodb
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  selector:
+    app: mongodb
+  ports:
+   - port: {{ .Values.backend.mongodb.port }}
+  type: NodePort

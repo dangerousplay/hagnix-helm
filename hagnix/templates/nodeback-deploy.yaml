@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeback
+  labels:
+    app: nodeback
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      namespace: {{ .Release.Namespace }}
+      name: nodeback
+      labels:
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        app: nodeback
+    spec:
+      containers:
+      - name: nodeback
+        image: {{ .Values.backend.node.image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: {{ .Values.backend.node.port }}
+        env:
+        - name: MONGO_HOST
+          value: {{ .Values.backend.mongodb.host }}
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_PASSWORD
+              name: secrets
+        - name: MONGO_USER
+          value: {{ .Values.backend.mongodb.root }}
+        - name: MONGO_DATABASE
+          value: {{ .Values.backend.mongodb.database }}
+        - name: REDIS_HOST
+          value: {{ .Values.backend.redis.host }}
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: REDIS_PASSWORD
+              name: secrets
+        - name: REDIS_PORT
+          value: {{ quote .Values.backend.redis.port }}
+        - name: PORT
+          value: {{ quote .Values.backend.node.port }}
+        readinessProbe:
+          httpGet:
+            port: {{ .Values.backend.node.port }}
+            path: /health
+          initialDelaySeconds: 30
+          periodSeconds: 3
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: nodeback

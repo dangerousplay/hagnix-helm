@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: redis
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      namespace: {{ .Release.Namespace }}
+      name: redis
+      labels:
+        app: redis
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    spec:
+      containers:
+      - name: redis
+        image: {{ .Values.backend.redis.image }}
+        ports:
+          - containerPort: {{ .Values.backend.redis.port }}
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: REDIS_PASSWORD
+              name: secrets
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.backend.redis.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 1
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.backend.redis.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: redis

@@ -1,0 +1,18 @@
+{{ if ne .Values.deploy "productio" -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-volv-pvc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: mysql
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+{{- end }}

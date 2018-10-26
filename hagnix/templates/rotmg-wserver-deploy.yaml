@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rotmgwserver
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: rotmgwserver
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: {{ .Values.backend.rotmgwserver.replicas }}
+  template:
+    metadata:
+      namespace: {{ .Release.Namespace }}
+      name: rotmgwserver
+      labels:
+        app: rotmgwserver
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    spec:
+      containers:
+      - name: rotmgwserver
+        image: {{ .Values.backend.rotmgwserver.image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: {{ .Values.backend.rotmgwserver.port }}
+        env:
+        - name: DB_HOST
+          value: {{ .Values.backend.mysql.host }}
+        - name: DB_USER
+          value: {{ .Values.backend.mysql.user }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_PASSWORD
+              name: secrets
+        - name: REDIS_HOST
+          value: {{ .Values.backend.redis.host }}
+        - name: REDIS_PORT
+          value: {{ quote .Values.backend.mysql.port }}
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: REDIS_PASSWORD
+              name: secrets
+        readinessProbe:
+          tcpSocket:
+            port: 2050
+          initialDelaySeconds: 30
+          periodSeconds: 1
+        livenessProbe:
+          tcpSocket:
+            port: 2050
+          initialDelaySeconds: 30
+          periodSeconds: 20
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: rotmgwserver

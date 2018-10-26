@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: mysql
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      namespace: {{ .Release.Namespace }}
+      name: mysql
+      labels:
+        app: mysql
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    spec:
+      containers:
+      - name: mysql
+        image: {{ .Values.backend.mysql.image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: {{ .Values.backend.mysql.port }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_ROOT_PASSWORD
+              name: secrets
+        - name: MYSQL_USER
+          value: {{ .Values.backend.mysql.user }}
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_PASSWORD
+              name: secrets
+        - name: MYSQL_DATABASE
+          value: {{ .Values.backend.mysql.database }}
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: data
+        - mountPath: /docker-entrypoint-initdb.d
+          name: startup
+          readOnly: true
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.backend.mysql.port }}
+          initialDelaySeconds: 30
+          periodSeconds: 1
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.backend.mysql.port }}
+          initialDelaySeconds: 30
+          periodSeconds: 20
+      volumes:
+      - name: data
+        {{ if eq .Values.deploy "productio" -}}
+        gcePersistentDisk:
+          pdName: mysql-disk
+          fsType: ext4
+        {{- else }}
+        persistentVolumeClaim:
+          claimName: mysql-volv-pvc
+        {{- end }}
+      - name: startup
+        secret:
+          secretName: sql-secrets
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: mysql

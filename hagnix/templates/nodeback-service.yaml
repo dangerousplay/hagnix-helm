@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: nodeback
+spec:
+  selector:
+    app: nodeback
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+  ports:
+  - port: {{ .Values.backend.node.port }}
+  {{ if (.Values.deploy) eq .Values.deploy "production" -}}
+  type: NodePort
+  {{- else }}
+  type: LoadBalancer
+  {{- end }}
