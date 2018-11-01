@@ -1,4 +1,4 @@
-{{ if ne .Values.deploy "productio" -}}
+{{ if ne .Values.cloud "GKE" -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

@@ -11,7 +11,7 @@ spec:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
   ports:
   - port: {{ .Values.backend.node.port }}
-  {{ if (.Values.deploy) eq .Values.deploy "production" -}}
+  {{ if eq .Values.deploy "production" -}}
   type: NodePort
   {{- else }}
   type: LoadBalancer

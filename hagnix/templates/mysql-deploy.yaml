@@ -59,7 +59,7 @@ spec:
           periodSeconds: 20
       volumes:
       - name: data
-        {{ if eq .Values.deploy "productio" -}}
+        {{ if eq .Values.cloud "GKE" -}}
         gcePersistentDisk:
           pdName: mysql-disk
           fsType: ext4

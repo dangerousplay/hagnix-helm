@@ -2,8 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-#deploy: "production"
+#types of Cloud supported GKE and Local
+cloud: "Local"
 deploy: "production"
+
+tcp: {
+  81: "hagnix/rotmgserver:81",
+  2050: "hagnix/rotmgwserver:2050"
+}
 
 backend:
   node: # hagnix/nodeback
