@@ -3,4 +3,7 @@ dependencies:
     version: "0.28.2"
     repository: https://kubernetes-charts.storage.googleapis.com
     import-values:
-      - child:
+      - child: tcp
+        parent: tcp
+      - child: controller.image
+        parent: controller.image

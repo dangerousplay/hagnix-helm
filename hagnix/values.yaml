@@ -6,15 +6,23 @@
 cloud: "Local"
 deploy: "production"
 
-tcp: {
-  81: "hagnix/rotmgserver:81",
-  2050: "hagnix/rotmgwserver:2050"
-}
+nginx-ingress:
+  controller:
+    name: controller
+    image:
+      repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-amd64
+      tag: "0.17.0"
+      pullPolicy: IfNotPresent
+
+  tcp: {
+    81: "hagnix/rotmgserver:81",
+    2050: "hagnix/rotmgwserver:2050"
+  }
 
 backend:
   node: # hagnix/nodeback
     #image: gcr.io/white-script-214013/hagnix/nodeback
-    image: gcr.io/white-script-214013/hagnix/nodeback
+    image: dangerousplay/hagnix-nodeback
     port: 3000
     replicas: 1
     autoscaling:
@@ -40,7 +48,7 @@ backend:
   rotmgserver:
     replicas: 1
     #image: gcr.io/white-script-214013/hagnix/server
-    image: gcr.io/white-script-214013/hagnix/server:1.1.2
+    image: dangerousplay/hagnix-server:latest
     port: 81
     autoscaling:
       use: true
@@ -55,4 +63,4 @@ backend:
     port: 2050
     replicas: 1
     #image: gcr.io/white-script-214013/hagnix/wserver
-    image: gcr.io/white-script-214013/hagnix/wserver:1.0
+    image: dangerousplay/hagnix-wserver:latest
