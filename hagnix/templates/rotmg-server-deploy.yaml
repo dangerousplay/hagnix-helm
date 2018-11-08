@@ -31,7 +31,7 @@ spec:
           value: {{ .Values.backend.rotmgserver.configPath }}
         {{ if (.Values.backend.rotmgserver.disableRegister) -}}
         - name: DISABLE_REGISTER
-          value: "true"
+          value: {{ .Values.backend.rotmgserver.disableRegister | quote }}
         {{- end }}
         - name: DB_HOST
           value: {{ .Values.backend.mysql.host }}

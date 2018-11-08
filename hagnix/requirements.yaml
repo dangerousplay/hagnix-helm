@@ -2,8 +2,9 @@ dependencies:
   - name: "nginx-ingress"
     version: "0.28.2"
     repository: https://kubernetes-charts.storage.googleapis.com
-    import-values:
-      - child: tcp
-        parent: tcp
-      - child: controller.image
-        parent: controller.image
+  - name: "grafana"
+    version: "1.9.1"
+    repository: https://kubernetes-charts.storage.googleapis.com/
+  - name: "prometheus"
+    version: "7.4.0"
+    repository: https://kubernetes-charts.storage.googleapis.com/

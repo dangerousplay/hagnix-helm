@@ -36,6 +36,8 @@ spec:
             secretKeyRef:
               key: MYSQL_PASSWORD
               name: secrets
+        - name: WHITE_LIST
+          value: {{ .Values.backend.rotmgwserver.whitelist | quote }}
         - name: REDIS_HOST
           value: {{ .Values.backend.redis.host }}
         - name: REDIS_PORT
