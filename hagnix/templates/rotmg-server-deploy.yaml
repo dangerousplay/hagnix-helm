@@ -28,7 +28,7 @@ spec:
           - containerPort: 80
         env:
         - name: CONFIGMAP
-          value: {{ .Values.backend.rotmgserver.configMap }}
+          value: {{ .Values.backend.rotmgserver.config.configMap }}
         - name: NAMESPACE
           value: {{ .Release.Namespace }}
         {{ if (.Values.backend.rotmgserver.disableRegister) -}}
@@ -55,6 +55,8 @@ spec:
               name: secrets
         - name: NAMESPACE
           value: {{ .Release.Namespace }}
+        - name: CORS_ORIGIN
+          value: {{ .Values.backend.node.cors_origin }}
         readinessProbe:
           tcpSocket:
             port: 80
@@ -65,13 +67,6 @@ spec:
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 20
-        volumeMounts:
-        - mountPath: /app/config
-          name: config
-      volumes:
-      - name: config
-        secret:
-          secretName: server-config
       restartPolicy: Always
   selector:
     matchLabels:

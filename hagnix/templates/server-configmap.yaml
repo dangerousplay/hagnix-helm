@@ -1,6 +1,6 @@
 {{- if .Values.backend.rotmgserver.config }}
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
   name: server-config
   namespace: {{ .Release.Namespace }}
@@ -8,7 +8,6 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-type: Opaque
 data:
 {{ toYaml .Values.backend.rotmgserver.config | indent 2 }}
 {{- end }}

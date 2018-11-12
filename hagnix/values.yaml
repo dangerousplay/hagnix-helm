@@ -17,6 +17,7 @@ nginx-ingress:
   tcp: {
     81: "hagnix/rotmgserver:81",
     2050: "hagnix/rotmgwserver:2050",
+    3000: "hagnix/nodeback:3000",
     82: "hagnix/hagnix-grafana:80",
     83: "hagnix/hagnix-prometheus-server:9090"
   }
@@ -24,9 +25,10 @@ nginx-ingress:
 backend:
   node: # hagnix/nodeback
     #image: gcr.io/white-script-214013/hagnix/nodeback
-    image: dangerousplay/hagnix-nodeback
+    image: dangerousplay/hagnix-nodeback:latest
     port: 3000
     replicas: 1
+    cors_origin: "http://localhost:4200"
     autoscaling:
       use: true
       minReplicas: 1
@@ -42,7 +44,7 @@ backend:
     host: redis
     image: bitnami/redis:4.0
   mongodb:
-    image: bitnami/mongodb:4.0
+    image: bitnami/mongodb:4.1
     root: root
     host: mongodb
     database: production
@@ -50,23 +52,27 @@ backend:
   rotmgserver:
     replicas: 1
     #image: gcr.io/white-script-214013/hagnix/server
-    image: dangerousplay/hagnix-server:latest
+    image: dangerousplay/hagnix-server
     port: 81
     autoscaling:
       use: true
       minReplicas: 1
       maxReplicas: 3
     disableRegister: true
-    configMap: "server-config"
-    config: { 
-      'server.cfg': "I1NlcnZlckNvbmZpZwpwb3J0OjgwCnZlcmlmeUVtYWlsOmZhbHNlCnNlcnZlckRvbWFpbjpodHRwOi8vYzQ1My5wdwojc2VydmVyRW1haWw6CiNzZXJ2ZXJFbWFpbFBhc3N3b3JkOgojc210cEhvc3Q6CiNzbXRwUG9ydDoKIwojRGF0YWJhc2UgQ29uZmlnCiMKZGJfaG9zdDoxMjcuMC4wLjEKZGJfZGF0YWJhc2U6cm90bWdwcm9kCmRiX3VzZXI6cm9vdApkYl9hdXRoOnJvb3QKIwojU2VydmVycwojCnN2ck51bTozCiNzdnIwTmFtZTpUZXN0aW5nIFNlcnZlcgojc3ZyMEFkcjo2OS4xNDAuMS4yMDMKI3N2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyME5hbWU6TG9jYWxob3N0CnN2cjBBZHI6MTI3LjAuMC4xCnN2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyMU5hbWU6SGFnbml4CnN2cjFBZHI6MzUuMjI0LjE3Ny4xNTMKc3ZyMk5hbWU6SGFnb3JvbW8Kc3ZyMkFkcjozNS4yMjQuMTc3LjE1Nwo="
-    }
+    config:
+       configMap: "server-config"
+       'server.cfg': "I1NlcnZlckNvbmZpZwpwb3J0OjgwCnZlcmlmeUVtYWlsOmZhbHNlCnNlcnZlckRvbWFpbjpodHRwOi8vYzQ1My5wdwojc2VydmVyRW1haWw6CiNzZXJ2ZXJFbWFpbFBhc3N3b3JkOgojc210cEhvc3Q6CiNzbXRwUG9ydDoKIwojRGF0YWJhc2UgQ29uZmlnCiMKZGJfaG9zdDoxMjcuMC4wLjEKZGJfZGF0YWJhc2U6cm90bWdwcm9kCmRiX3VzZXI6cm9vdApkYl9hdXRoOnJvb3QKIwojU2VydmVycwojCnN2ck51bToyCiNzdnIwTmFtZTpUZXN0aW5nIFNlcnZlcgojc3ZyMEFkcjo2OS4xNDAuMS4yMDMKI3N2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyME5hbWU6TG9jYWxob3N0CnN2cjBBZHI6MTI3LjAuMC4xCnN2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyMU5hbWU6SGFnbml4MwpzdnIxQWRyOjM1LjIyNC4xNzcuMTUzCg=="
   rotmgwserver:
     port: 2050
     replicas: 1
     #image: gcr.io/white-script-214013/hagnix/wserver
-    image: dangerousplay/hagnix-wserver:latest
+    image: dangerousplay/hagnix-wserver
     whitelist: true
+
+frontend:
+  angular:
+
+
 
 prometheus:
   rbac:
