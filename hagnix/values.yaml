@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 #types of Cloud supported GKE and Local
+#Disk necessary: mysql-disk and mongo-disk
 cloud: "Local"
 deploy: "production"
 
@@ -23,6 +24,9 @@ nginx-ingress:
   }
 
 backend:
+  credentials:
+    create_default: true
+
   node: # hagnix/nodeback
     #image: gcr.io/white-script-214013/hagnix/nodeback
     image: dangerousplay/hagnix-nodeback:latest

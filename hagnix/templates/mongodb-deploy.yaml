@@ -35,6 +35,11 @@ spec:
               name: secrets
         - name: MONGODB_DATABASE
           value: {{ .Values.backend.mongodb.database }}
+        {{ if .Values.backend.credentials.create_default -}}
+        volumeMounts:
+          - mountPath: /docker-entrypoint-initdb.d/
+            name: scripts
+        {{- end }}
         livenessProbe:
           tcpSocket:
             port: {{ .Values.backend.mongodb.port }}
@@ -45,6 +50,10 @@ spec:
             port: {{ .Values.backend.mongodb.port }}
           initialDelaySeconds: 30
           periodSeconds: 1
+      volumes:
+        - name: scripts
+          configMap:
+            name: mongodb
 #        volumeMounts:
 #          - mountPath: /data/db
 #            name: data
