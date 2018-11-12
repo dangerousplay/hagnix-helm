@@ -27,8 +27,10 @@ spec:
         ports:
           - containerPort: 80
         env:
-        - name: CONFIG
-          value: {{ .Values.backend.rotmgserver.configPath }}
+        - name: CONFIGMAP
+          value: {{ .Values.backend.rotmgserver.configMap }}
+        - name: NAMESPACE
+          value: {{ .Release.Namespace }}
         {{ if (.Values.backend.rotmgserver.disableRegister) -}}
         - name: DISABLE_REGISTER
           value: {{ .Values.backend.rotmgserver.disableRegister | quote }}
@@ -51,6 +53,8 @@ spec:
             secretKeyRef:
               key: REDIS_PASSWORD
               name: secrets
+        - name: NAMESPACE
+          value: {{ .Release.Namespace }}
         readinessProbe:
           tcpSocket:
             port: 80
