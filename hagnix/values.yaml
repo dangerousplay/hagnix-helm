@@ -84,8 +84,8 @@ backend:
 
 frontend:
   angular:
-    base_url: "http://www.hagnix.tk:3000 "
-    image: dangerousplay/hagnix-angular
+    base_url: "http://www.hagnix.tk:3000"
+    image: dangerousplay/hagnix-angular:latest
     autoscaling:
       use: true
       minReplicas: 1
