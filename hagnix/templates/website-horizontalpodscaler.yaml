@@ -1,0 +1,23 @@
+{{ if (.Values.frontend.angular.autoscaling.use) -}}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: website
+  labels:
+    app: website
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: website
+  minReplicas: {{ .Values.backend.rotmgserver.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.backend.rotmgserver.autoscaling.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 50
+{{- end }}

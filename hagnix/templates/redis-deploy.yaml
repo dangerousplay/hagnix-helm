@@ -24,12 +24,8 @@ spec:
         image: {{ .Values.backend.redis.image }}
         ports:
           - containerPort: {{ .Values.backend.redis.port }}
-        env:
-        - name: REDIS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: REDIS_PASSWORD
-              name: secrets
+        args:
+          - --requirepass {{ .Values.backend.redis.password }}
         imagePullPolicy: IfNotPresent
         readinessProbe:
           tcpSocket:

@@ -55,8 +55,6 @@ spec:
               name: secrets
         - name: NAMESPACE
           value: {{ .Release.Namespace }}
-        - name: CORS_ORIGIN
-          value: {{ .Values.backend.node.cors_origin }}
         readinessProbe:
           tcpSocket:
             port: 80

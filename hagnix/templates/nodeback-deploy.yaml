@@ -48,6 +48,12 @@ spec:
           value: {{ quote .Values.backend.redis.port }}
         - name: PORT
           value: {{ quote .Values.backend.node.port }}
+        - name: CORS_ORIGIN
+          value: {{ .Values.backend.node.cors_origin  | quote }}
+        {{ if .Values.debug -}}
+        - name: DEBUG
+          value: {{ .Values.debug | quote }}
+        {{- end }}
         readinessProbe:
           httpGet:
             port: {{ .Values.backend.node.port }}

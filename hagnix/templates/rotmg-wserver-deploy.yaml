@@ -47,6 +47,10 @@ spec:
             secretKeyRef:
               key: REDIS_PASSWORD
               name: secrets
+        {{ if .Values.debug -}}
+        - name: DEBUG
+          value: {{ .Values.debug | quote }}
+        {{- end }}
         readinessProbe:
           tcpSocket:
             port: 2050
