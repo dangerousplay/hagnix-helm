@@ -65,7 +65,7 @@ backend:
   rotmgserver:
     replicas: 1
     #image: gcr.io/white-script-214013/hagnix/server
-    image: dangerousplay/hagnix-server
+    image: dangerousplay/hagnix-server:latest
     port: 81
     autoscaling:
       use: true
