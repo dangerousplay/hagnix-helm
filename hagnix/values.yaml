@@ -37,10 +37,10 @@ backend:
 
   node: # hagnix/nodeback
     #image: gcr.io/white-script-214013/hagnix/nodeback
-    image: dangerousplay/hagnix-nodeback:latest
+    image: dangerousplay/hagnix-nodeback
     port: 3000
     replicas: 1
-    cors_origin: "http://localhost"
+    cors_origin: "http://www.hagnix.tk"
     autoscaling:
       use: true
       minReplicas: 1
@@ -74,7 +74,7 @@ backend:
     disableRegister: true
     config:
        configMap: "server-config"
-       'server.cfg': "I1NlcnZlckNvbmZpZwpwb3J0OjgwCnZlcmlmeUVtYWlsOmZhbHNlCnNlcnZlckRvbWFpbjpodHRwOi8vYzQ1My5wdwojc2VydmVyRW1haWw6CiNzZXJ2ZXJFbWFpbFBhc3N3b3JkOgojc210cEhvc3Q6CiNzbXRwUG9ydDoKIwojRGF0YWJhc2UgQ29uZmlnCiMKZGJfaG9zdDoxMjcuMC4wLjEKZGJfZGF0YWJhc2U6cm90bWdwcm9kCmRiX3VzZXI6cm9vdApkYl9hdXRoOnJvb3QKIwojU2VydmVycwojCnN2ck51bToyCiNzdnIwTmFtZTpUZXN0aW5nIFNlcnZlcgojc3ZyMEFkcjo2OS4xNDAuMS4yMDMKI3N2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyME5hbWU6TG9jYWxob3N0CnN2cjBBZHI6MTI3LjAuMC4xCnN2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyMU5hbWU6SGFnbml4CnN2cjFBZHI6MzUuMjI0LjE3Ny4xNTM="
+       'server.cfg': "I1NlcnZlckNvbmZpZwpwb3J0OjgwCnZlcmlmeUVtYWlsOmZhbHNlCnNlcnZlckRvbWFpbjpodHRwOi8vYzQ1My5wdwojc2VydmVyRW1haWw6CiNzZXJ2ZXJFbWFpbFBhc3N3b3JkOgojc210cEhvc3Q6CiNzbXRwUG9ydDoKIwojRGF0YWJhc2UgQ29uZmlnCiMKZGJfaG9zdDoxMjcuMC4wLjEKZGJfZGF0YWJhc2U6cm90bWdwcm9kCmRiX3VzZXI6cm9vdApkYl9hdXRoOnJvb3QKIwojU2VydmVycwojCnN2ck51bToyCiNzdnIwTmFtZTpUZXN0aW5nIFNlcnZlcgojc3ZyMEFkcjo2OS4xNDAuMS4yMDMKI3N2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyME5hbWU6TG9jYWxob3N0CnN2cjBBZHI6MTI3LjAuMC4xCnN2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyMU5hbWU6SGFnbml4CnN2cjFBZHI6MzUuMTg0LjIyOC4xODA="
   rotmgwserver:
     port: 2050
     replicas: 1
@@ -84,8 +84,8 @@ backend:
 
 frontend:
   angular:
-    base_url: "http://localhost:3000"
-    image: dangerousplay/hagnix-angular:latest
+    base_url: "http://www.hagnix.tk:3000"
+    image: dangerousplay/hagnix-angular
     autoscaling:
       use: true
       minReplicas: 1
