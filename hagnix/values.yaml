@@ -4,7 +4,7 @@
 
 #types of Cloud supported GKE and Local
 #Disk necessary: mysql-disk and mongo-disk
-cloud: "Local"
+cloud: "GKE"
 deploy: "production"
 
 nginx-ingress:
