@@ -65,7 +65,7 @@ backend:
   rotmgserver:
     replicas: 1
     #image: gcr.io/white-script-214013/hagnix/server
-    image: dangerousplay/hagnix-server
+    image: dangerousplay/hagnix-server:1.0
     port: 81
     autoscaling:
       use: true
@@ -73,7 +73,7 @@ backend:
       maxReplicas: 3
     disableRegister: true
     config:
-       server : "I1NlcnZlckNvbmZpZwpwb3J0OjgwCnZlcmlmeUVtYWlsOmZhbHNlCnNlcnZlckRvbWFpbjpodHRwOi8vYzQ1My5wdwojc2VydmVyRW1haWw6CiNzZXJ2ZXJFbWFpbFBhc3N3b3JkOgojc210cEhvc3Q6CiNzbXRwUG9ydDoKIwojRGF0YWJhc2UgQ29uZmlnCiMKZGJfaG9zdDoxMjcuMC4wLjEKZGJfZGF0YWJhc2U6cm90bWdwcm9kCmRiX3VzZXI6cm9vdApkYl9hdXRoOnJvb3QKIwojU2VydmVycwojCnN2ck51bToxCiNzdnIwTmFtZTpUZXN0aW5nIFNlcnZlcgojc3ZyMEFkcjo2OS4xNDAuMS4yMDMKI3N2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyME5hbWU6SGFnbml4CnN2cjBBZHI6MzUuMTg0LjIyOC4xODA="
+       server : "I1NlcnZlckNvbmZpZwpwb3J0OjgwCnZlcmlmeUVtYWlsOmZhbHNlCnNlcnZlckRvbWFpbjpodHRwOi8vYzQ1My5wdwojc2VydmVyRW1haWw6CiNzZXJ2ZXJFbWFpbFBhc3N3b3JkOgojc210cEhvc3Q6CiNzbXRwUG9ydDoKIwojRGF0YWJhc2UgQ29uZmlnCiMKZGJfaG9zdDoxMjcuMC4wLjEKZGJfZGF0YWJhc2U6cm90bWdwcm9kCmRiX3VzZXI6cm9vdApkYl9hdXRoOnJvb3QKIwojU2VydmVycwojCnN2ck51bToxCiNzdnIwTmFtZTpUZXN0aW5nIFNlcnZlcgojc3ZyMEFkcjo2OS4xNDAuMS4yMDMKI3N2cjBMb2NhdGlvbjpBcmxpbmd0b24sIFZpcmdpbmlhLCBVU0EKc3ZyME5hbWU6SGFnbml4CnN2cjBBZHI6MzUuMTg0LjIyOC4xODAKc3ZyMU5hbWU6SGFnbml4CnN2cjFBZHI6MzUuMTg0LjIyOC4xODA="
   rotmgwserver:
     port: 2050
     replicas: 1
@@ -85,7 +85,7 @@ backend:
 frontend:
   angular:
     base_url: "http://www.hagnix.tk:3000"
-    image: dangerousplay/hagnix-angular:latest
+    image: dangerousplay/hagnix-angular:1.0
     autoscaling:
       use: true
       minReplicas: 1
