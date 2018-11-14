@@ -9,5 +9,5 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 data:
-{{ toYaml .Values.backend.rotmgserver.config | indent 2 }}
+  server: {{ .Values.backend.rotmgserver.config.server }}
 {{- end }}
