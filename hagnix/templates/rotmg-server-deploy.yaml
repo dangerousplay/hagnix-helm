@@ -50,7 +50,7 @@ spec:
               key: REDIS_PASSWORD
               name: secrets
         - name: SETTINGS_VARIABLE
-          value: {{ .Values.backend.rotmgserver.config.server | required | quote }}
+          value: {{ .Values.backend.rotmgserver.config.server | quote }}
 
         readinessProbe:
           tcpSocket:
