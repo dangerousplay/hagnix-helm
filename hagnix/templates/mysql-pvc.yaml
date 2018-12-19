@@ -1,4 +1,4 @@
-{{ if ne .Values.cloud "GKE" -}}
+{{ if eq .Values.cloud "Local" -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

@@ -40,6 +40,10 @@ spec:
           - mountPath: /docker-entrypoint-initdb.d/
             name: scripts
         {{- end }}
+        {{ if eq .Values.cloud "GKE" }}
+          - mountPath: /data/db
+            name: data
+        {{ end -}}
         livenessProbe:
           tcpSocket:
             port: {{ .Values.backend.mongodb.port }}
@@ -54,6 +58,12 @@ spec:
         - name: scripts
           configMap:
             name: mongodb
+        {{ if eq .Values.cloud "GKE" -}}
+        - name: data
+          gcePersistentDisk:
+            pdName: mongo-disk
+            fsType: ext4
+        {{- end }}
 #        volumeMounts:
 #          - mountPath: /data/db
 #            name: data

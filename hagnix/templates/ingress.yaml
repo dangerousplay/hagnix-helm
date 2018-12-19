@@ -1,0 +1,17 @@
+{{ if false}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: kuard-ingress
+    annotations:
+        kubernetes.io/ingress.class: traefik
+    labels:
+      app: hagnix
+spec:
+    rules:
+        - http:
+              paths:
+                  - backend:
+                        serviceName: kuard-service
+                        servicePort: 80
+        {{ end }}
